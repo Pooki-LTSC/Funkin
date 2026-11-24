@@ -629,6 +629,30 @@ class PolymodHandler
     // Can be used to delete files.
     Polymod.blacklistImport('openfl.filesystem.File');
 
+    // `lime.utils.Bytes`
+    // Can be used to read and write files anywhere.
+    Polymod.blacklistImport('lime.utils.Bytes');
+    Polymod.blacklistImport('lime.utils._Bytes.Bytes_Impl_');
+
+    // `openfl.net.FileReference`
+    // Can be used to read and write files anywhere.
+    Polymod.blacklistInstanceFields(openfl.net.FileReference, [
+      '__path',
+      '__data',
+      'openFileDialog_onSelect',
+      'saveFileDialog_onSelect',
+      'urlLoader_download_onComplete'
+    ]);
+
+    // `funkin.modding.install.*`
+    // Can be used to install mods without permission or overwrite files.
+    for (cls in ClassMacro.listClassesInPackage('funkin.modding.install'))
+    {
+      if (cls == null) continue;
+      var className:String = Type.getClassName(cls);
+      Polymod.blacklistImport(className);
+    }
+
     // `funkin.api.*`
     // Contains functions which may allow for cheating and such.
     for (cls in ClassMacro.listClassesInPackage('funkin.api'))
@@ -702,6 +726,11 @@ class PolymodHandler
       'unserialize',
       'getLibrary',
       'readObject',
+      '__path',
+      '__data',
+      'openFileDialog_onSelect',
+      'saveFileDialog_onSelect',
+      'urlLoader_download_onComplete',
       'clearData',
       'setLevelScore',
       'setSongScore',
